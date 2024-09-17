@@ -8,7 +8,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 fun generateQRCode(text: String): Bitmap? {
     val writer = QRCodeWriter()
     return try {
-        val bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 512, 512)
+        val bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 1024, 1024)
         val width = bitMatrix.width
         val height = bitMatrix.height
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)

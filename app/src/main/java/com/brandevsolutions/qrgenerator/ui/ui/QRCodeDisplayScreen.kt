@@ -34,7 +34,7 @@ fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = "QR Code",
                 contentScale = ContentScale.FillBounds,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(400.dp)
             )
         }
 
@@ -51,8 +51,11 @@ fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
         }) {
             Text("Generate Another QR Code")
         }
+        //Boton para imprimir el qr en un pdf
+        Button(onClick = {
+
+        }){
+            Text("Print QR Code")
+        }
     }
-
-
-
 }
