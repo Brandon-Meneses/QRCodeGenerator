@@ -1,4 +1,4 @@
-package com.brandevsolutions.qrgenerator.ui.ui
+package com.brandevsolutions.qrgenerator.ui.functions
 
 import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat

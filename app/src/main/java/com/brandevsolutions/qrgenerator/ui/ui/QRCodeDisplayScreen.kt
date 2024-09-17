@@ -16,12 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.brandevsolutions.qrgenerator.ui.functions.createPdfWithQRCode
+import com.brandevsolutions.qrgenerator.ui.functions.generateQRCode
 
 @Composable
 fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
     val qrText = Uri.decode(encodedQrText)  // Descodifica la URL
+    val context = LocalContext.current
     val qrCodeBitmap = generateQRCode(qrText)
 
     Column(
@@ -53,8 +57,10 @@ fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
         }
         //Boton para imprimir el qr en un pdf
         Button(onClick = {
-
-        }){
+            qrCodeBitmap?.let {
+                createPdfWithQRCode(context, it, "QRCode_$qrText")  // Llamar a la función para generar el PDF
+            }
+        }) {
             Text("Print QR Code")
         }
     }
