@@ -1,6 +1,8 @@
 package com.brandevsolutions.qrgenerator.ui.ui
 
 import android.net.Uri
+import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,12 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.brandevsolutions.qrgenerator.ui.functions.createPdfWithQRCode
 import com.brandevsolutions.qrgenerator.ui.functions.generateQRCode
+import com.brandevsolutions.qrgenerator.ui.functions.requestStoragePermissions
+import com.brandevsolutions.qrgenerator.ui.functions.sanitizeFileName
 
 @Composable
 fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
     val qrText = Uri.decode(encodedQrText)  // Descodifica la URL
-    val context = LocalContext.current
     val qrCodeBitmap = generateQRCode(qrText)
+    val context = LocalContext.current  // Para obtener el contexto
+    val activity = LocalContext.current as ComponentActivity
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -43,25 +48,31 @@ fun QRCodeDisplayScreen(encodedQrText: String, navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        //texto de salida con margin
+        // Texto de salida con margin
         Text(
             text = "QR Code for: $qrText",
             modifier = Modifier.padding(20.dp)
         )
 
-        // Agregar un botón para volver a la pantalla de entrada
+        // Botón para volver a la pantalla de entrada
         Button(onClick = {
             navController.popBackStack()
         }) {
             Text("Generate Another QR Code")
         }
-        //Boton para imprimir el qr en un pdf
+
+        // Botón para imprimir el QR en un PDF
         Button(onClick = {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                requestStoragePermissions(activity)
+            }
             qrCodeBitmap?.let {
-                createPdfWithQRCode(context, it, "QRCode_$qrText")  // Llamar a la función para generar el PDF
+                val sanitizedFileName = sanitizeFileName("QRCode_$qrText")
+                createPdfWithQRCode(context, it, sanitizedFileName)  // Llamar a la función para generar el PDF
             }
         }) {
             Text("Print QR Code")
         }
+
     }
 }
